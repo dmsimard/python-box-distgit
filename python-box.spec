@@ -1,12 +1,11 @@
 Name:           python-box
-Version:        3.4.1
+Version:        3.4.2
 Release:        1%{?dist}
 Summary:        Python dictionaries with advanced dot notation access
 
 License:        MIT
 URL:            https://github.com/cdgriffith/Box
 Source0:        %{pypi_source}
-Source1:        https://raw.githubusercontent.com/cdgriffith/Box/%{version}/LICENSE
 BuildArch:      noarch
 
 BuildRequires: /usr/bin/pathfix.py
@@ -25,13 +24,9 @@ BuildRequires:  python3-pytest-runner
 
 %prep
 %autosetup -n python-box-%{version}
-# The license file is not included in the source tarballs
-# https://github.com/cdgriffith/Box/issues/92
-cp -p %{SOURCE1} .
-
 # Make sure we don't have ambiguous python shebangs
 # https://fedoraproject.org/wiki/Changes/Make_ambiguous_python_shebangs_error
-pathfix.py -pni "%{__python3} %{py3_shbang_opts}" .
+pathfix.py -pni "%{__python3}" .
 
 %build
 %py3_build

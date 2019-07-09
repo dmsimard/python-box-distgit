@@ -24,15 +24,19 @@ BuildRequires:  python3-pytest-runner
 
 %prep
 %autosetup -n python-box-%{version}
-# Make sure we don't have ambiguous python shebangs
-# https://fedoraproject.org/wiki/Changes/Make_ambiguous_python_shebangs_error
-pathfix.py -pni "%{__python3}" .
 
 %build
 %py3_build
 
 %install
 %py3_install
+
+# Make sure we don't have ambiguous python shebangs in bindir
+# https://fedoraproject.org/wiki/Changes/Make_ambiguous_python_shebangs_error
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{_bindir}/box.py
+
+# Otherwise remove the shebang from site-packages
+sed -i "\%#!/usr/bin/env python%d" %{buildroot}%{python3_sitelib}/box.py
 
 %files -n python3-box
 %license LICENSE
